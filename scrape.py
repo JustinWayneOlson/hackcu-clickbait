@@ -6,7 +6,15 @@ import time
 import pprint as pp
 
 pattern = re.compile('https?:\/\/([^\/]*)\/?|$')
-response = requests.get('https://www.reddit.com/r/news/top', headers = {'User-agent': 'linux:sample.app:v1.0.0 (by /u/sunnys1d3up)'})
+url_headers = {
+    'User-agent': 'linux:sample.app:v1.0.0 (by /u/sunnys1d3up)',
+     'client_id':'n3_je4qLGsUZXQ',
+     'client_secret':'ZtyVtckXr2BqSOoRD8sZwqic-_4',
+     'user_agent':'test',
+     'username':'pzawad94',
+     'password':'@Charlie1'
+}
+response = requests.get('https://www.reddit.com/r/news/top', headers = url_headers)
 next_url = 'https://www.reddit.com/r/news/top'
 for i in range(0,2000):
     with open('ml.csv', 'wb') as csv_file:
