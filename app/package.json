@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/JustinWayneOlson/hackcu-clickbait/issues"
   },
-  "homepage": "https://github.com/JustinWayneOlson/hackcu-clickbait#readme"
+  "homepage": "https://github.com/JustinWayneOlson/hackcu-clickbait#readme",
+  "dependencies": {
+    "node-summary": "^1.1.0",
+    "request": "^2.81.0"
+  }
 }
