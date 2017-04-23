@@ -13,6 +13,13 @@ var machineLearning = new aws.MachineLearning({
     'region': 'us-east-1',
 });
 
+/**
+ * @returns {object} - complete: (bool) whether or not the request completed properly,
+ * summary (string): the text summary of the article
+ * title (string): the text title of the article
+ * url (string): the original url of the article.
+ */
+
 app.post('/summarize', function (req, res) {
 
      if (req.body && !req.body.urlToCheck) {
@@ -42,9 +49,9 @@ app.post('/summarize', function (req, res) {
 
 /**
  *
- * @returns [object] - complete {bool}: whether or not the request completed properly,
- * isClickBait {int}: whether or not the ML model matched the article as clickbait
- * percentCertainty {float}: How certain the ML model is in it's answer.
+ * @returns {object} - complete (bool): whether or not the request completed properly,
+ * isClickBait (int): whether or not the ML model matched the article as clickbait
+ * percentCertainty (float): How certain the ML model is in it's answer.
  */
 
 app.post('/checkarticle', function (req, res) {
