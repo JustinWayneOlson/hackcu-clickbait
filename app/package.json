@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/JustinWayneOlson/hackcu-clickbait#readme",
   "dependencies": {
+    "aws-sdk": "^2.45.0",
+    "body-parser": "^1.17.1",
     "node-summary": "^1.1.0",
     "request": "^2.81.0"
   }
