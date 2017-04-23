@@ -1,7 +1,7 @@
 {
   "name": "hackcu-clickbait",
   "version": "0.0.1",
-  "author": ["Lauren Raddatz","Justin Olson","Patrick Zawadzki"]
+  "author": ["Lauren Raddatz","Justin Olson","Patrick Zawadzki"],
   "manifest_version": 2,
   "description": "anti-clickbait hackcu app",
   "permissions": [
