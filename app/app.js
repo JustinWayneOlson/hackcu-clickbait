@@ -19,10 +19,25 @@ app.post('/summarize', function (req, res) {
      if (req.body && !req.body.urlToCheck) {
           return res.status(400).send({
              complete: 'false',
-             summary: '',
-             url: '',
           });
      }
+     request.get("http://api.smmry.com/?SM_API_KEY="+API_KEYS.SUMMARY_KEY+"&SM_URL="+encodeURIComponent(req.body.urlToCheck), function (err, response ) {
+         if (err || JSON.parse(response.body).sm_api_error) {
+             return res.status(400).send({
+                 complete: 'false',
+
+             });
+         }
+         var responseJSON = JSON.parse(response.body);
+
+         return res.status(200).send({
+             complete: 'true',
+             summary: responseJSON.sm_api_content,
+             title: responseJSON.sm_api_title,
+             url: req.body.urlToCheck,
+         });
+     });
+
 
 });
 
