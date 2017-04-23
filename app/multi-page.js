@@ -1,30 +1,46 @@
-var request = require('request');
+var rp = require('request-promise');
 var cheerio = require('cheerio');
 var levenshtein = require('levenshtein');
+var co = require('co');
 //URL of base article to be scraped
 //var url = 'http://www.viralthread.com/aaron-hernandez-wrote-this-message-on-his-forehead-before-committing-suicide';
 //var url = 'http://scribol.com/a/lifestyle/weddings-and-special-occasions/didnt-call-her-after-first-date-33-years-learned-truth/20/'
 var url = 'http://scribol.com/a/lifestyle/weddings-and-special-occasions/didnt-call-her-after-first-date-33-years-learned-truth/';
+var next_link = true;
+co(function* () {
+    var scrapedUrl = url;
+    while(next_link) {
+        var fullResponse = yield Promise.resolve(rp({
+            uri: scrapedUrl,
+            resolveWithFullResponse: true,
+        }));
+        scrapedUrl = scrape(url, fullResponse, fullResponse.body);
+        console.log(scrapedUrl);
+    }
+}).catch(error);
 
+function error(err) {
+    console.error(err.stack);
+}
 
-//regex to parse a url into it's domain
-var promise = new Promise(function(resolve, reject){
-   var r = request.get(url, function(error, response, html) {
-      if(error)
-      {
-         reject(error);
-      }
-      else
-      {
-         var content = this;
-         resolve(scrape(url, content, html));
-      }
-   });
-});
-
-promise.then(function(url){
-   console.log("promise: ", url);
-});
+// //regex to parse a url into it's domain
+// var promise = new Promise(function(resolve, reject){
+//    var r = request.get(url, function(error, response, html) {
+//       if(error)
+//       {
+//          reject(error);
+//       }
+//       else
+//       {
+//          var content = this;
+//          resolve(scrape(url, content, html));
+//       }
+//    });
+// });
+//
+// promise.then(function(url){
+//    console.log("promise: ", url);
+// });
 
 function regexURLGroup(pattern, target_string, url_domain) {
     var match = pattern.exec(target_string);
@@ -51,7 +67,7 @@ function regexURLGroup(pattern, target_string, url_domain) {
 
 function scrape(url, content, html){
         var pattern = /(?:^http:\/\/|^https:\/\/|^){1}(?:([^\.]*)\.\w{2}\.\w{2}|\w*\.([a-zA-Z0-9\-_]*)\.|([a-zA-Z0-9\-_]*)\.)/
-        var article_url = content.uri.href;
+        var article_url = content.request.href;
         var url_domain = regexURLGroup(pattern, article_url, "");
         var deltas = [];
         var hrefs = [];
