@@ -29,19 +29,19 @@ var machineLearning = new aws.MachineLearning({
 app.post('/summarize', function (req, res) {
 
      if (req.body && !req.body.urlToCheck) {
-          return res.status(400).send({
+          return res.status(400).json({
              complete: 'false',
           });
      }
      request.get("http://api.smmry.com/?SM_API_KEY="+API_KEYS.SUMMARY_KEY+"&SM_URL="+encodeURIComponent(req.body.urlToCheck), function (err, response ) {
          if (err || JSON.parse(response.body).sm_api_error) {
-             return res.status(400).send({
+             return res.status(400).json({
                  complete: 'false',
 
              });
          }
          var responseJSON = JSON.parse(response.body);
-         return res.status(200).send({
+         return res.status(200).json({
              complete: 'true',
              summary: responseJSON.sm_api_content,
              title: responseJSON.sm_api_title,
@@ -61,7 +61,7 @@ app.post('/summarize', function (req, res) {
 
 app.post('/checkarticle', function (req, res) {
     if (req.body && !req.body.urlToCheck || !req.body.articleTitle) {
-        return res.status(400).send({
+        return res.status(400).json({
            complete: 'false',
            isClickBait: null,
            percentCertainty: null,
@@ -81,13 +81,13 @@ app.post('/checkarticle', function (req, res) {
 
    machineLearning.predict(options, function (err, data) {
       if (err) {
-          return res.status(400).send({
+          return res.status(400).json({
               complete: false,
               isClickBait: null,
               percentCertainty: null,
           });
       }
-        return res.status(200).send({
+        return res.status(200).json({
            complete: true,
            isClickBait: data.Prediction.predictedValue !== '0' ,
            percentCertainty: data.Prediction.predictedScores[data.Prediction.predictedLabel],

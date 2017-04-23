@@ -69,10 +69,10 @@ function regexURLGroup(pattern, target_string, url_domain) {
 function scrape(url, content, html){
         var pattern = /(?:^http:\/\/|^https:\/\/|^){1}(?:([^\.]*)\.\w{2}\.\w{2}|\w*\.([a-zA-Z0-9\-_]*)\.|([a-zA-Z0-9\-_]*)\.)/
         var article_url = content.request.href;
-        visited.push(article_url);
         var url_domain = regexURLGroup(pattern, article_url, "");
         var deltas = [];
         var hrefs = [];
+        var averages = [];
         var lev, url, endurl;
             var $ = cheerio.load(html);
             var i = 0;
@@ -81,15 +81,20 @@ function scrape(url, content, html){
 
             $('body').filter(function() {
                 $(this).find('[href]').each(function(index, value) {
-                    if(visited.indexOf($(value).attr('href') > 1))
+                    console.log(visited.indexOf($(value).attr('href')))
+                    if(visited.indexOf($(value).attr('href')) > 1)
                      {
                         return true;
                      }
+                     else{
+                        visited.push(article_url);
+                    }
+                    console.log('test');
                     //distance between base article url and potential page continuations
                     var element = $(value).get(0);
                     var target_string = element.attribs['href'];
                     lev = new levenshtein(article_url, target_string);
-
+                    averages.push(lev.distance);
                     var href = {
                         'source_url': article_url,
                         'domain': regexURLGroup(pattern, target_string, url_domain),
@@ -97,14 +102,19 @@ function scrape(url, content, html){
                         'origin_dif': lev.distance
                     };
                     hrefs.push(href);
+                    console.log(hrefs);
                 });
 
             });
-            hrefs.sort(function(a, b) {
-                return a.origin_dif - b.origin_dif
-            });
+             var sum = averages.reduce(function(a, b) {
+                 return a + b;
+             var avg = sum / averages.length;
+
+             /*hrefs.sort(function(a, b) {
+             });                                           return a.origin_dif - b.origin_dif
+             var avg = sum / deltas.length;            });
             if (deltas.length >= 2) {
-                deltas.push(Math.abs(hrefs[0]['origin_dif'] - deltas[i - 1]));
+                deltas.push(Math.abs(hrefs[0]['origin_dif'] ));
                 i++;
             } else {
                 deltas.push(Math.abs(hrefs[0]['origin_dif']));
@@ -117,9 +127,15 @@ function scrape(url, content, html){
             end_url = hrefs[0]['attributes']['href'];
             lev = new levenshtein(article_url, end_url);
 
-            if (lev.distance > avg + (avg * .5)) {
+            var weightedAvg = avg ;
+            console.log(lev.distance, " ", weightedAvg);*/
+             console.log(lev.distance," ",avg)    ;
+            if (avg > (hrefs[i]['attributes']['origin_dif']*1.2))
+            {
                 next_link = false;
             }
+            console.log(end_url)     ;
             return end_url;
 
-        }
+        });
+}
