@@ -50,7 +50,7 @@ app.post('/summarize', function (req, res) {
 /**
  *
  * @returns {object} - complete (bool): whether or not the request completed properly,
- * isClickBait (int): whether or not the ML model matched the article as clickbait
+ * isClickBait (bool): whether or not the ML model matched the article as clickbait
  * percentCertainty (float): How certain the ML model is in it's answer.
  */
 
@@ -84,8 +84,8 @@ app.post('/checkarticle', function (req, res) {
       }
         return res.status(200).send({
            complete: true,
-           isClickBait: data.Prediction.predictedValue,
-            percentCertainty: data.Prediction.predictedScores[data.Prediction.predictedValue],
+           isClickBait: data.Prediction.predictedValue !== '0' ,
+           percentCertainty: data.Prediction.predictedScores[data.Prediction.predictedLabel],
         });
    });
 
