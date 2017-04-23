@@ -40,6 +40,13 @@ app.post('/summarize', function (req, res) {
 
 });
 
+/**
+ *
+ * @returns [object] - complete {bool}: whether or not the request completed properly,
+ * isClickBait {int}: whether or not the ML model matched the article as clickbait
+ * percentCertainty {float}: How certain the ML model is in it's answer.
+ */
+
 app.post('/checkarticle', function (req, res) {
    if (req.body && !req.body.urlToCheck || !req.body.articleTitle) {
         return res.status(400).send({
