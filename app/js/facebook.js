@@ -1,54 +1,57 @@
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-73159092-1']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-function loadScript(scriptName, callback) {
-    var scriptEl = document.createElement('script');
-    scriptEl.src = chrome.extension.getURL('lib/' + scriptName + '.js');
-    scriptEl.addEventListener('load', callback, false);
-    document.head.appendChild(scriptEl);
-}
-
 const facebook_clickbait = function(node) {
 
-  const images = [...node.getElementsByClassName('mbs _6m6 _2cnj _5s6c')];
-
-  images.forEach(function(el) {
-    var links = el.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) {
-    var link = (links[i].innerHTML);
+  const chunks = [...node.getElementsByClassName('userContent')];
+  var arr = [];
+  for (var i=0; i < chunks.length; i++){
+    var temp = chunks[i].parentNode.childNodes;
+    if (temp.length >= 3){ // count the siblings
+      arr.push(chunks[i].parentNode);
+    }
   }
-var request = new XMLHttpRequest();
-  request.onreadystatechange = function() {
-      if (request.readyState === 4) {
-          if (request.status === 200) {
-              var data = JSON.parse(request.responseText);
-              var clickbait = data.clickbaitiness;
-              if(clickbait<60){
-                let html = "<ul style='position:absolute;top:30px;right:10px;padding:5px;font-size:12px;line-height:1.8;background-color:#03ad3c;color:#fff;border-radius:5px'>👍 Not Clickbait. click for summary</ul>";
-                el.insertAdjacentHTML('afterend', html);
-              }
-              else if(clickbait > 90){
-                let html = "<ul style='position:absolute;top:30px;right:10px;padding:5px;font-size:12px;line-height:1.8;background-color:#d10c2d;color:#fff;border-radius:5px'>💁 This is Clickbait. Click for summary</ul> ";
-                el.insertAdjacentHTML('afterend', html);
-              }
-              else {
-                let html = "<ul style='position:absolute;top:30px;right:10px;padding:5px;font-size:12px;line-height:1.8;background-color:#595955;color:#fff;border-radius:5px'>👻 "+clickbait+"% clickbait. click for summary</ul>";
-                el.insertAdjacentHTML('afterend', html);
-                //e1.addEventListener('click', )
-              }
+  // parent contains the three components -- user content, header, and image
+  var counter = 0;
+  arr.forEach(function(el) {
+    var children = el.childNodes;
+    var image = el.getElementsByClassName('mbs _6m6 _2cnj _5s6c'); 
+    var links = image[counter].getElementsByTagName('a');
+    var headline = links.textContent;
+    counter++;
+    for (var i = 0; i < links.length; i++) {
+        var link = (links[i].innerHTML);
+    }
+    
+    // ajax request
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (request.readyState === 4) { // completed status code
+        if (request.status === 200) { // completed status code
+          // reponse from request
+          var data = JSON.parse(request.responseText);
+
+          if(data.complete === true){
+            var clickbait = data.isClickBait; // returns 0 or 1
+            var percent = data.percentCertainty; // how certain it is in its result
+            if(clickbait===false){
+              let html = "<div> <ul style='position:absolute;top:30px;right:10px;padding:5px;font-size:12px;line-height:1.8;background-color:#03ad3c;color:#fff;border-radius:5px'> Not Clickbait, "+percent+"% certain<button type='button' id='button1'> summary </button> </ul> </div>";
+              //
+              el.insertAdjacentHTML('afterend', html);
+              button1.addEventListener("click", function(){window.location.replace(link);});
+            }
+            else if(clickbait===true){
+              let html = "<div> <ul style='position:absolute;top:30px;right:10px;padding:5px;font-size:12px;line-height:1.8;background-color:#d10c2d;color:#fff;border-radius:5px'>This is Clickbait, "+percent+"% certain<button type='button' id='button2'> summary </button> </ul> </div>";
+              // <button onclick="location.href = 'http://smmry.com/'" type="button" id="button2">summary</button> 
+              el.insertAdjacentHTML('afterend', html);
+              button2.addEventListener("click", function(){window.location.replace(link);});
+            } 
+    
           }
+        }
       }
   };
 
-  request.open("GET", "https://clickbait-detector.herokuapp.com/detect?headline="+link , true);
-  request.send();
+  jsontosend = {'urlToCheck': link, 'articleTitle': headline};
+  request.open("GET", 34.201.106.134/checkarticle, true);
+  request.send(jsontosend);
   });
 
 };
