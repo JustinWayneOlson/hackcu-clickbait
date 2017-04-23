@@ -5,7 +5,10 @@
   "manifest_version": 2,
   "description": "anti-clickbait hackcu app",
   "permissions": [
-    "http://www.facebook.com/*", "https://www.facebook.com/*","https://clickbait-detector.herokuapp.com/*"
+    "http://www.facebook.com/*", 
+    "tabs", 
+    "https://www.facebook.com/*",
+    "https://clickbait-detector.herokuapp.com/*"
   ],
   "web_accessible_resources": [ "locales/*"],
   "browser_action": {
@@ -16,17 +19,11 @@
   "icons": {
      "128": "icon/cursor.png"
   },
-   "background": {
-    "scripts": [
-      "./lib/jquery-3.2.1.slim.min.js"
-    ]
-  },
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "homepage_url": "https://github.com/JustinWayneOlson/hackcu-clickbait",
   "content_scripts": [
     {
         "matches": ["http://www.facebook.com/*", "https://www.facebook.com/*"],
-        "js" : [ "js/facebook.js"],
+        "js" : ["js/facebook.js"],
         "run_at" : "document_idle",
         "all_frames" : false
     }
