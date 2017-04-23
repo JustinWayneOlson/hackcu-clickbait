@@ -22,8 +22,9 @@ var r = request.get(url, function(error, response, html){
                max['siblings'] = $(value).siblings().length;
                max['element'] = $(value);
             }
+            $(max['element']).attr('abcdef', 1);
+            console.log($('[abcdef]'));
          });
-            console.log(max['siblings']);
       });
    }
 });

@@ -7,6 +7,7 @@ var co = require('co');
 //var url = 'http://scribol.com/a/lifestyle/weddings-and-special-occasions/didnt-call-her-after-first-date-33-years-learned-truth/20/'
 var url = 'http://scribol.com/a/lifestyle/weddings-and-special-occasions/didnt-call-her-after-first-date-33-years-learned-truth/';
 var next_link = true;
+var visited = [];
 co(function* () {
     var scrapedUrl = url;
     while(next_link) {
@@ -68,6 +69,7 @@ function regexURLGroup(pattern, target_string, url_domain) {
 function scrape(url, content, html){
         var pattern = /(?:^http:\/\/|^https:\/\/|^){1}(?:([^\.]*)\.\w{2}\.\w{2}|\w*\.([a-zA-Z0-9\-_]*)\.|([a-zA-Z0-9\-_]*)\.)/
         var article_url = content.request.href;
+        visited.push(article_url);
         var url_domain = regexURLGroup(pattern, article_url, "");
         var deltas = [];
         var hrefs = [];
@@ -79,6 +81,10 @@ function scrape(url, content, html){
 
             $('body').filter(function() {
                 $(this).find('[href]').each(function(index, value) {
+                    if(visited.indexOf($(value).attr('href') > 1))
+                     {
+                        return true;
+                     }
                     //distance between base article url and potential page continuations
                     var element = $(value).get(0);
                     var target_string = element.attribs['href'];
