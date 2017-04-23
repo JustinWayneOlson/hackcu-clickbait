@@ -5,6 +5,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: false
 }));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 var request = require('request');
 var API_KEYS = require('./API_KEYS');
 var urlService = require('./URLService.js');
@@ -35,7 +41,6 @@ app.post('/summarize', function (req, res) {
              });
          }
          var responseJSON = JSON.parse(response.body);
-
          return res.status(200).send({
              complete: 'true',
              summary: responseJSON.sm_api_content,
@@ -55,7 +60,7 @@ app.post('/summarize', function (req, res) {
  */
 
 app.post('/checkarticle', function (req, res) {
-   if (req.body && !req.body.urlToCheck || !req.body.articleTitle) {
+    if (req.body && !req.body.urlToCheck || !req.body.articleTitle) {
         return res.status(400).send({
            complete: 'false',
            isClickBait: null,
