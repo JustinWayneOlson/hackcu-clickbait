@@ -45,7 +45,7 @@ app.post('/checkarticle', function (req, res) {
         return res.status(400).send({
            complete: 'false',
            isClickBait: null,
-           percentLikely: null,
+           percentCertainty: null,
         });
    }
    var cleanedUrl = urlService.cleanURL({
@@ -65,13 +65,13 @@ app.post('/checkarticle', function (req, res) {
           return res.status(400).send({
               complete: false,
               isClickBait: null,
-              percentLikely: null,
+              percentCertainty: null,
           });
       }
         return res.status(200).send({
            complete: true,
            isClickBait: data.Prediction.predictedValue,
-           percentLikely: data.Prediction.predictedScores[data.Prediction.predictedValue],
+            percentCertainty: data.Prediction.predictedScores[data.Prediction.predictedValue],
         });
    });
 
