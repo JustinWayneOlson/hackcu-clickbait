@@ -1,0 +1,19 @@
+{
+  "name": "hackcu-clickbait",
+  "version": "1.0.0",
+  "description": "HackCU Chome Extension fighting the good fight",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustinWayneOlson/hackcu-clickbait.git"
+  },
+  "author": "Justin Olson, Patrick Zawadzki, Lauren Raddatz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustinWayneOlson/hackcu-clickbait/issues"
+  },
+  "homepage": "https://github.com/JustinWayneOlson/hackcu-clickbait#readme"
+}
