@@ -7,7 +7,6 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 var request = require('request');
 var API_KEYS = require('./API_KEYS');
-var summary = require('node-summary');
 var urlService = require('./URLService.js');
 var aws = require('aws-sdk');
 var machineLearning = new aws.MachineLearning({
